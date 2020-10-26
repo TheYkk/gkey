@@ -2,6 +2,7 @@ package main
 
 import (
 	"crypto/sha256"
+	"errors"
 	"flag"
 	"fmt"
 	"os"
@@ -17,6 +18,7 @@ var chars = []string{
 }
 
 func main()  {
+
 	password := flag.String("p","","-p Master Password")
 	realm := flag.String("r","","-r Realm example github.com")
 	length := flag.Int("l",16,"-l length of password")
@@ -24,18 +26,12 @@ func main()  {
 	// ? Parse flags
 	flag.Parse()
 
-	if *password == ""{
-		fmt.Println("Password can not be empty")
+	fancyPassword,err := GenPass(*password,*realm,*length)
+	if err != nil {
+		fmt.Println(err)
 		os.Exit(1)
 	}
-
-	if *realm == ""{
-		fmt.Println("realm can not be empty")
-		os.Exit(1)
-	}
-
-	fancyPassword := GenPass(*password,*realm,*length)
-
+	
 	// ? Print password and print new line to stderr
 	// ? because we don't want to grap new line on pipeline
 
@@ -43,7 +39,19 @@ func main()  {
 	_, _ = fmt.Fprint(os.Stderr, "\n")
 }
 
-func GenPass(password,realm string,length int) string {
+func GenPass(password,realm string,length int) (string , error) {
+	if password == ""{
+		return "",errors.New("password can not be empty")
+	}
+
+	if realm == ""{
+		return "",errors.New("realm can not be empty")
+	}
+
+	if length == 0{
+		return "",errors.New("length can not be empty")
+	}
+
 	// ? Create sha256sum from string
 	h := sha256.New()
 	h.Write([]byte(password+"-"+realm))
@@ -55,7 +63,8 @@ func GenPass(password,realm string,length int) string {
 		str = append(str, chars[pos])
 	}
 
-	return strings.Join(str[0:length],"")
+	// ? Shorten to a certain length
+	return strings.Join(str[0:length],""),nil
 }
 
 
