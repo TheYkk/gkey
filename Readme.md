@@ -13,6 +13,27 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
+
 # Gkey
 
-Gkey is 
+Gkey is a simple vaultless password manager in Go.
+It's generating sha256 sum of password + "-" + realm combination.
+And with that sum gkey generating secure password.
+
+## Usage
+
+### Example
+
+```bash
+gkey -r github.com -p my-super-secure-master-password
+
+# 6a?_#ZH$kVtB,P*!
+```
+
+### Flags
+
+`-p <master password>` - master password which will be used to generate other passwords
+
+`-r <realm>` - any string which identifies requested password, most likely key usage or resource URL
+
+`-l <length>` - number of characters in the generated password (default 16 )
