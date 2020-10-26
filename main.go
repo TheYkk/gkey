@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-var chars = []string{
+var Chars = []string{
 	"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z",
 	"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z",
 	"1","2","3","4","5","6","7","8","9","0",
@@ -31,7 +31,7 @@ func main()  {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	
+
 	// ? Print password and print new line to stderr
 	// ? because we don't want to grap new line on pipeline
 
@@ -59,8 +59,8 @@ func GenPass(password,realm string,length int) (string , error) {
 	// ? Translate hex to base 94 password
 	var str []string
 	for _,hexa := range h.Sum(nil){
-		pos := hexto94(hexa,byte(len(chars)))
-		str = append(str, chars[pos])
+		pos := Hexto94(hexa,byte(len(Chars)))
+		str = append(str, Chars[pos])
 	}
 
 	// ? Shorten to a certain length
@@ -69,6 +69,6 @@ func GenPass(password,realm string,length int) (string , error) {
 
 
 // ? Translate base 255 code to base 94
-func hexto94(base byte,max byte) byte  {
+func Hexto94(base byte,max byte) byte  {
 	return base % max
 }
