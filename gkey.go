@@ -41,7 +41,9 @@ func GenPass(password, realm string, length int) (string, error) {
 	if length == 0 {
 		return "", errors.New("length can not be empty")
 	}
-
+	if length > 32 {
+		return "", errors.New("length can not be bigger than 32")
+	}
 	// ? Create sha256sum from string
 	h := sha256.New()
 	_ , _ = h.Write([]byte(password + "-" + realm))
@@ -49,7 +51,7 @@ func GenPass(password, realm string, length int) (string, error) {
 	// ? Translate hex to base 94 password
 	var str []string
 	for _, hexa := range h.Sum(nil) {
-		pos := Hexto94(hexa, byte(len(Chars)))
+		pos := HexToGivenBase(hexa, byte(len(Chars)))
 		str = append(str, Chars[pos])
 	}
 
@@ -58,6 +60,6 @@ func GenPass(password, realm string, length int) (string, error) {
 }
 
 // ? Translate base 255 code to base 94
-func Hexto94(base byte, max byte) byte {
+func HexToGivenBase(base byte, max byte) byte {
 	return base % max
 }

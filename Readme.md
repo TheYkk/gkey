@@ -37,3 +37,5 @@ gkey -r github.com -p my-super-secure-master-password
 `-r <realm>` - any string which identifies requested password, most likely key usage or resource URL
 
 `-l <length>` - number of characters in the generated password (default 16 )
+
+> inspired by https://github.com/cloudflare/gokey

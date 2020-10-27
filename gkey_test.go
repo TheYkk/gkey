@@ -94,6 +94,15 @@ func TestGenPass(t *testing.T) {
 			},
 			want:    "K%0IHV7r)z!E>183",
 			wantErr: false,
+		},{
+			name: "Test password with larger length",
+			args: args{
+				password: "ykk",
+				realm:    "github.com",
+				length:   33,
+			},
+			want:    "",
+			wantErr: true,
 		},
 	}
 	for _, tt := range tests {
@@ -110,7 +119,7 @@ func TestGenPass(t *testing.T) {
 	}
 }
 
-func Test_Hexto94(t *testing.T) {
+func Test_HexToGivenBase(t *testing.T) {
 	type args struct {
 		base byte
 		max  byte
@@ -160,7 +169,7 @@ func Test_Hexto94(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := Hexto94(tt.args.base, tt.args.max); got != tt.want {
+			if got := HexToGivenBase(tt.args.base, tt.args.max); got != tt.want {
 				t.Errorf("hexto94() = %v, want %v", got, tt.want)
 			}
 		})
